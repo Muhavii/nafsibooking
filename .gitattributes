@@ -1,0 +1,20 @@
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# C# files
+*.cs diff=csharp
+*.csproj diff=csharp
+
+# Razor files - treat as C#
+*.cshtml linguist-language=C#
+*.cshtml.cs diff=csharp
+
+# Exclude vendored files and build outputs from language statistics
+wwwroot/lib/ linguist-vendored
+node_modules/ linguist-vendored
+bin/ linguist-generated
+obj/ linguist-generated
+
+# Exclude minified/generated files
+*.min.js linguist-generated
+*.min.css linguist-generated
