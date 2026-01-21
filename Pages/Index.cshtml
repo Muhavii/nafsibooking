@@ -1,10 +1,80 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Book tickets";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero mb-5">
+    <div class="d-flex flex-column gap-3 gap-md-4">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <span class="badge badge-soft">Curated nights, seamless check-in</span>
+        </div>
+        <div>
+            <h1>Book the events that move you.</h1>
+            <p class="lead mb-0">Browse upcoming concerts, conferences, and theatre premieres. Reserve secure tickets in a few clicks and get a ready-to-share confirmation.</p>
+        </div>
+        <div class="d-flex flex-wrap gap-3">
+            <div class="pill">No fees at checkout</div>
+            <div class="pill">Instant confirmation</div>
+            <div class="pill">Mobile-ready tickets</div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4" id="events">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+        <div>
+            <div class="text-muted-sm small">Upcoming picks</div>
+            <h2 class="section-title mb-0">Find your night</h2>
+        </div>
+        <form class="d-flex flex-wrap gap-2" method="get">
+            <input type="search" class="form-control" name="q" value="@Model.Query" placeholder="Search by city, venue, or title" style="min-width: 240px;" />
+            <input type="date" class="form-control" name="date" value="@Model.DateFilter" />
+            <button type="submit" class="btn btn-brand">Search</button>
+        </form>
+    </div>
+
+    @if (Model.Events.Any())
+    {
+        <div class="row g-4">
+            @foreach (var ev in Model.Events)
+            {
+                <div class="col-12 col-md-6 col-xl-4">
+                    <div class="card card-event h-100">
+                        <div class="card-body d-flex flex-column gap-3">
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <span class="badge bg-white text-dark border">@ev.Category</span>
+                                <span class="pill tier-chip">From @ev.BasePrice.ToString("0")</span>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1">@ev.Title</h5>
+                                <div class="text-muted-sm">@ev.Venue • @ev.City</div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 text-muted-sm">
+                                <span>@ev.Date.ToString("MMM dd, yyyy • h:mm tt")</span>
+                            </div>
+                            <p class="card-text">@ev.Description</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var highlight in ev.Highlights.Take(2))
+                                {
+                                    <span class="pill">@highlight</span>
+                                }
+                            </div>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <div class="text-muted-sm">@ev.Tiers.Count tier options</div>
+                                <a class="btn btn-outline-dark" asp-page="/Events/Details" asp-route-id="@ev.Id">View &amp; book</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="fw-semibold mb-1">No events match your search.</div>
+            <div>Try adjusting the date or search for another city.</div>
+        </div>
+    }
+</section>

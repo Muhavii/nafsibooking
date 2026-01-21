@@ -1,0 +1,136 @@
+@page
+@model nafsibooking.Pages.Admin.Events.CreateModel
+@{
+    ViewData["Title"] = "Admin • Create Event";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <div class="text-muted-sm small">Admin</div>
+        <h2 class="section-title mb-0">Create a new event</h2>
+    </div>
+    <a class="btn btn-outline-secondary" asp-page="/Index">Back to site</a>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+
+<div class="row g-4">
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Input.Title"></label>
+                            <input class="form-control" asp-for="Input.Title" />
+                            <span class="text-danger" asp-validation-for="Input.Title"></span>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" asp-for="Input.Category"></label>
+                            <input class="form-control" asp-for="Input.Category" />
+                            <span class="text-danger" asp-validation-for="Input.Category"></span>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" asp-for="Input.BasePrice">Base price (display)</label>
+                            <input class="form-control" asp-for="Input.BasePrice" type="number" step="0.01" />
+                            <span class="text-danger" asp-validation-for="Input.BasePrice"></span>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" asp-for="Input.Venue"></label>
+                            <input class="form-control" asp-for="Input.Venue" />
+                            <span class="text-danger" asp-validation-for="Input.Venue"></span>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" asp-for="Input.City"></label>
+                            <input class="form-control" asp-for="Input.City" />
+                            <span class="text-danger" asp-validation-for="Input.City"></span>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" asp-for="Input.StartsAt">Start date & time</label>
+                            <input class="form-control" asp-for="Input.StartsAt" type="datetime-local" />
+                            <span class="text-danger" asp-validation-for="Input.StartsAt"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Input.Description"></label>
+                            <textarea class="form-control" asp-for="Input.Description" rows="3"></textarea>
+                            <span class="text-danger" asp-validation-for="Input.Description"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Input.HighlightsRaw">Highlights (one per line)</label>
+                            <textarea class="form-control" asp-for="Input.HighlightsRaw" rows="3"></textarea>
+                            <span class="text-danger" asp-validation-for="Input.HighlightsRaw"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h5 class="mb-3">Ticket tiers</h5>
+                    <div class="d-flex flex-column gap-3">
+                        @for (var i = 0; i < Model.Tiers.Count; i++)
+                        {
+                            <div class="p-3 border rounded-3 bg-light">
+                                <div class="mb-2 fw-semibold">Tier @(i + 1)</div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <label class="form-label" asp-for="Tiers[i].Name">Name</label>
+                                        <input class="form-control" asp-for="Tiers[i].Name" />
+                                        <span class="text-danger" asp-validation-for="Tiers[i].Name"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label" asp-for="Tiers[i].Price">Price</label>
+                                        <input class="form-control" asp-for="Tiers[i].Price" type="number" step="0.01" />
+                                        <span class="text-danger" asp-validation-for="Tiers[i].Price"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label" asp-for="Tiers[i].Available">Available</label>
+                                        <input class="form-control" asp-for="Tiers[i].Available" type="number" />
+                                        <span class="text-danger" asp-validation-for="Tiers[i].Available"></span>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" asp-for="Tiers[i].Description">Description</label>
+                                        <input class="form-control" asp-for="Tiers[i].Description" />
+                                        <span class="text-danger" asp-validation-for="Tiers[i].Description"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-brand">Save event</button>
+                        <a class="btn btn-outline-secondary" asp-page="/Index">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="mb-3">Existing events</h5>
+                <div class="d-flex flex-column gap-2">
+                    @foreach (var ev in Model.ExistingEvents)
+                    {
+                        <div class="d-flex justify-content-between align-items-start p-3 border rounded-3">
+                            <div>
+                                <div class="fw-semibold">@ev.Title</div>
+                                <div class="text-muted-sm">@ev.City • @ev.Date.ToString("MMM dd, yyyy")</div>
+                            </div>
+                            <a class="btn btn-sm btn-outline-dark" asp-page="/Events/Details" asp-route-id="@ev.Id">View</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

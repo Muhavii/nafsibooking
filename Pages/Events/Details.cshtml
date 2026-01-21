@@ -1,0 +1,119 @@
+@page "/events/{id}"
+@model nafsibooking.Pages.Events.DetailsModel
+@{
+    ViewData["Title"] = Model.Event?.Title ?? "Event";
+}
+
+@if (Model.Event is null)
+{
+    <div class="alert alert-warning">We could not find this event.</div>
+}
+else
+{
+    <section class="mb-4">
+        <a class="text-decoration-none" asp-page="/Index" asp-fragment="events">&larr; Back to events</a>
+    </section>
+
+    <section class="row g-4">
+        <div class="col-12 col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex flex-column gap-3">
+                    <span class="badge bg-light text-dark">@Model.Event.Category</span>
+                    <h1 class="mb-1">@Model.Event.Title</h1>
+                    <div class="text-muted-sm">@Model.Event.Venue • @Model.Event.City</div>
+                    <div class="d-flex flex-wrap gap-2 text-muted-sm">
+                        <span class="pill">@Model.Event.Date.ToString("dddd, MMM dd • h:mm tt")</span>
+                        <span class="pill tier-chip">From @Model.Event.BasePrice.ToString("0")</span>
+                    </div>
+                    <p class="mb-0">@Model.Event.Description</p>
+                    <div>
+                        <h6 class="mb-2">What to expect</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var highlight in Model.Event.Highlights)
+                            {
+                                <span class="pill">@highlight</span>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <h6 class="mb-2">Ticket tiers</h6>
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var tier in Model.Event.Tiers)
+                            {
+                                <div class="d-flex justify-content-between align-items-start gap-3 p-3 border rounded-3 bg-light">
+                                    <div>
+                                        <div class="fw-semibold">@tier.Name</div>
+                                        <div class="text-muted-sm">@tier.Description</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-semibold">@tier.Price.ToString("C0")</div>
+                                        <div class="text-muted-sm">@tier.Available avail.</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+            <div class="booking-panel">
+                <h5 class="mb-3">Reserve tickets</h5>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Error))
+                {
+                    <div class="alert alert-danger">@Model.Error</div>
+                }
+
+                @if (Model.Result is not null)
+                {
+                    <div class="alert alert-success">
+                        <div class="fw-semibold">Booking confirmed</div>
+                        <div>Code: @Model.Result.ConfirmationCode</div>
+                        <div>@Model.Result.Tickets ticket(s) • @Model.Result.TierName tier</div>
+                        <div>Total: @Model.Result.Total.ToString("C0")</div>
+                    </div>
+                }
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Booking.FullName"></label>
+                        <input class="form-control" asp-for="Booking.FullName" />
+                        <span class="text-danger" asp-validation-for="Booking.FullName"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Booking.Email"></label>
+                        <input class="form-control" asp-for="Booking.Email" />
+                        <span class="text-danger" asp-validation-for="Booking.Email"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Booking.Tier">Ticket tier</label>
+                        <select class="form-select" asp-for="Booking.Tier">
+                            @foreach (var tier in Model.Event.Tiers)
+                            {
+                                <option value="@tier.Name">@tier.Name (@tier.Price.ToString("C0"))</option>
+                            }
+                        </select>
+                        <span class="text-danger" asp-validation-for="Booking.Tier"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Booking.Tickets"></label>
+                        <input class="form-control" asp-for="Booking.Tickets" type="number" min="1" max="10" />
+                        <span class="text-danger" asp-validation-for="Booking.Tickets"></span>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" asp-for="Booking.AcceptTerms" />
+                        <label class="form-check-label" asp-for="Booking.AcceptTerms">I agree to the booking terms.</label>
+                        <span class="text-danger d-block" asp-validation-for="Booking.AcceptTerms"></span>
+                    </div>
+                    <button type="submit" class="btn btn-brand w-100">Book now</button>
+                </form>
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
