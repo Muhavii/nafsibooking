@@ -1,0 +1,130 @@
+@page
+@model nafsibooking.Pages.RequestEventModel
+@{
+    ViewData["Title"] = "Request an Event";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="section-title mb-2">Request an Event</h2>
+        <p class="text-muted">Are you a promoter? Submit your event proposal for approval.</p>
+    </div>
+    <a class="btn btn-outline-secondary" asp-page="/Index">Back</a>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @Model.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <h5 class="mb-3">Your Information</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="Input.PromoterName"></label>
+                            <input class="form-control" asp-for="Input.PromoterName" required />
+                            <span class="text-danger" asp-validation-for="Input.PromoterName"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="Input.PromoterEmail"></label>
+                            <input class="form-control" asp-for="Input.PromoterEmail" type="email" required />
+                            <span class="text-danger" asp-validation-for="Input.PromoterEmail"></span>
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3">Event Information</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Input.EventTitle"></label>
+                            <input class="form-control" asp-for="Input.EventTitle" required />
+                            <span class="text-danger" asp-validation-for="Input.EventTitle"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="Input.EventCategory"></label>
+                            <select class="form-select" asp-for="Input.EventCategory" required>
+                                <option value="">Select category...</option>
+                                <option value="Music">Music</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Conference">Conference</option>
+                                <option value="Festival">Festival</option>
+                                <option value="Theater">Theater</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="Input.EventCategory"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="Input.ProposedDate"></label>
+                            <input class="form-control" asp-for="Input.ProposedDate" type="datetime-local" required />
+                            <span class="text-danger" asp-validation-for="Input.ProposedDate"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="Input.Venue"></label>
+                            <input class="form-control" asp-for="Input.Venue" required />
+                            <span class="text-danger" asp-validation-for="Input.Venue"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="Input.City"></label>
+                            <input class="form-control" asp-for="Input.City" required />
+                            <span class="text-danger" asp-validation-for="Input.City"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Input.EstimatedAttendance">Estimated Attendance</label>
+                            <input class="form-control" asp-for="Input.EstimatedAttendance" type="number" min="1" required />
+                            <span class="text-danger" asp-validation-for="Input.EstimatedAttendance"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Input.Description"></label>
+                            <textarea class="form-control" asp-for="Input.Description" rows="5" placeholder="Tell us about your event..." required></textarea>
+                            <span class="text-danger" asp-validation-for="Input.Description"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                <h6 class="card-title">Timeline</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2">
+                        <strong>1. Submit</strong>
+                        <p class="text-muted mb-0">Submit your event proposal</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong>2. Review</strong>
+                        <p class="text-muted mb-0">Our team reviews your request</p>
+                    </li>
+                    <li>
+                        <strong>3. Confirmation</strong>
+                        <p class="text-muted mb-0">You'll hear from us via email</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="card-title">Requirements</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li>✓ Organized promoter</li>
+                    <li>✓ Clear event details</li>
+                    <li>✓ Available venue</li>
+                    <li>✓ Realistic attendance estimate</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

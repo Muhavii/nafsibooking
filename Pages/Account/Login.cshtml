@@ -1,0 +1,41 @@
+@page
+@model nafsibooking.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Log In";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">Welcome back</h2>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger">@Model.ErrorMessage</div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Input.Email"></label>
+                            <input class="form-control" asp-for="Input.Email" type="email" required />
+                            <span class="text-danger" asp-validation-for="Input.Email"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Input.Password"></label>
+                            <input class="form-control" asp-for="Input.Password" type="password" required />
+                            <span class="text-danger" asp-validation-for="Input.Password"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Log In</button>
+                    </form>
+
+                    <hr class="my-4" />
+                    <div class="text-center">
+                        New here? <a asp-page="/Account/Register">Create an account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

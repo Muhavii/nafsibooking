@@ -1,0 +1,33 @@
+@page
+@model nafsibooking.Pages.Admin.LoginModel
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">Admin Access</h2>
+                    
+                    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger">@Model.ErrorMessage</div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Admin Password</label>
+                            <input type="password" class="form-control" id="password" asp-for="Password" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+
+                    <hr class="my-4" />
+                    <a class="btn btn-outline-secondary w-100" asp-page="/Index">Back to site</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

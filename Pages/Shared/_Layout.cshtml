@@ -1,4 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@inject nafsibooking.Services.IUserAuthService Auth
+@inject nafsibooking.Services.IUserService Users
+@inject nafsibooking.Services.IAdminAuthService AdminAuth
+@{
+    nafsibooking.Models.User? currentUser = null;
+    var isAdmin = AdminAuth.IsAdminAuthenticated(Context);
+    var isUserAuth = Auth.IsAuthenticated(Context);
+    if (isUserAuth)
+    {
+        var uid = Auth.GetUserId(Context);
+        System.Diagnostics.Debug.WriteLine($"[Layout] User ID from cookie: {uid}");
+        if (!string.IsNullOrEmpty(uid))
+        {
+            currentUser = Users.GetById(uid!);
+            System.Diagnostics.Debug.WriteLine($"[Layout] User found: {currentUser?.DisplayName}");
+        }
+    }
+    System.Diagnostics.Debug.WriteLine($"[Layout] isUserAuth={isUserAuth}, isAdmin={isAdmin}, currentUser={currentUser?.DisplayName}");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,10 +45,62 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index" asp-fragment="events">Events</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Events/Create">Admin</a>
-                        </li>
                     </ul>
+                    @if (currentUser == null)
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Login">Log In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Register">Sign Up</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @currentUser.DisplayName
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    @if (isAdmin)
+                                    {
+                                        <li class="px-3 text-muted small">Admin</li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/Admin/Events/Create">+ Create Event</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/Admin/Dashboard">Dashboard</a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                    }
+                                    <li>
+                                        <a class="dropdown-item" asp-page="/Account/Login">Switch Account</a>
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form method="post" asp-page="/Account/Logout" class="px-3">
+                                            <button type="submit" class="btn btn-link dropdown-item">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        @if (isAdmin)
+                        {
+                            <!-- Optional quick admin buttons next to user dropdown -->
+                            <ul class="navbar-nav ms-2">
+                                <li class="nav-item">
+                                    <a class="btn btn-sm btn-outline-primary" asp-page="/Admin/Events/Create">+ Create</a>
+                                </li>
+                                <li class="nav-item ms-2">
+                                    <a class="btn btn-sm btn-outline-secondary" asp-page="/Admin/Dashboard">Dashboard</a>
+                                </li>
+                            </ul>
+                        }
+                    }
                 </div>
             </div>
         </nav>

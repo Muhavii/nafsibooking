@@ -1,0 +1,51 @@
+@page
+@model nafsibooking.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="mb-4">Create your account</h2>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger">@Model.ErrorMessage</div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Input.DisplayName"></label>
+                            <input class="form-control" asp-for="Input.DisplayName" required />
+                            <span class="text-danger" asp-validation-for="Input.DisplayName"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Input.Email"></label>
+                            <input class="form-control" asp-for="Input.Email" type="email" required />
+                            <span class="text-danger" asp-validation-for="Input.Email"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Input.Password"></label>
+                            <input class="form-control" asp-for="Input.Password" type="password" required />
+                            <span class="text-danger" asp-validation-for="Input.Password"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" asp-for="Input.ConfirmPassword"></label>
+                            <input class="form-control" asp-for="Input.ConfirmPassword" type="password" required />
+                            <span class="text-danger" asp-validation-for="Input.ConfirmPassword"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    </form>
+
+                    <hr class="my-4" />
+                    <div class="text-center">
+                        Already have an account? <a asp-page="/Account/Login">Log in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

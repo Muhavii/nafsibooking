@@ -1,0 +1,107 @@
+@page
+@model nafsibooking.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <div class="text-muted-sm small">Admin</div>
+        <h2 class="section-title mb-0">Dashboard</h2>
+    </div>
+    <div class="gap-2 d-flex">
+        <a class="btn btn-primary" asp-page="/Admin/Events/Create">+ Create Event</a>
+        <form method="post" asp-page-handler="Logout" style="display: inline;">
+            <button type="submit" class="btn btn-outline-secondary">Logout</button>
+        </form>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Pending Requests</h6>
+                <h3>@Model.PendingCount</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Approved</h6>
+                <h3>@Model.ApprovedCount</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Rejected</h6>
+                <h3>@Model.RejectedCount</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mb-3">Event Requests</h4>
+
+@if (!Model.Requests.Any())
+{
+    <div class="alert alert-info">No requests yet.</div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Promoter</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in Model.Requests)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@request.PromoterName</strong>
+                                <br>
+                                <small class="text-muted">@request.PromoterEmail</small>
+                            </td>
+                            <td>
+                                <strong>@request.EventTitle</strong>
+                                <br>
+                                <small class="text-muted">@request.Venue, @request.City</small>
+                            </td>
+                            <td>@request.ProposedDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                @if (request.Status == "pending")
+                                {
+                                    <span class="badge bg-warning">Pending</span>
+                                }
+                                else if (request.Status == "approved")
+                                {
+                                    <span class="badge bg-success">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                            </td>
+                            <td>@request.SubmittedAt.ToString("MMM dd")</td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" asp-page="/Admin/RequestDetails" asp-route-id="@request.Id">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

@@ -18,6 +18,23 @@
             <div class="pill">Instant confirmation</div>
             <div class="pill">Mobile-ready tickets</div>
         </div>
+        @if (Model.IsAdminAuthenticated)
+        {
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary" asp-page="/Admin/Events/Create">+ Create Event</a>
+                <a class="btn btn-outline-secondary" asp-page="/Admin/Dashboard">Dashboard</a>
+                <form method="post" asp-page="/Index" asp-page-handler="Logout" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-danger">Logout</button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-secondary" asp-page="/Admin/Login">Admin Login</a>
+                <a class="btn btn-outline-brand" asp-page="/RequestEvent">Propose an Event</a>
+            </div>
+        }
     </div>
 </section>
 

@@ -1,0 +1,107 @@
+@page "{id}"
+@model nafsibooking.Pages.Admin.RequestDetailsModel
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="section-title">Event Request Details</h2>
+    <a class="btn btn-outline-secondary" asp-page="/Admin/Dashboard">Back</a>
+</div>
+
+@if (Model.PromoterRequestData == null)
+{
+    <div class="alert alert-danger">Request not found.</div>
+}
+else
+{
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                        <div>
+                            <h4>@Model.PromoterRequestData.EventTitle</h4>
+                            <p class="text-muted mb-0">@Model.PromoterRequestData.EventCategory • @Model.PromoterRequestData.ProposedDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        @if (Model.PromoterRequestData.Status == "pending")
+                        {
+                            <span class="badge bg-warning">Pending</span>
+                        }
+                        else if (Model.PromoterRequestData.Status == "approved")
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                    </div>
+
+                    <hr />
+
+                    <h6 class="text-muted">Promoter Information</h6>
+                    <p>
+                        <strong>@Model.PromoterRequestData.PromoterName</strong><br>
+                        <a href="mailto:@Model.PromoterRequestData.PromoterEmail">@Model.PromoterRequestData.PromoterEmail</a>
+                    </p>
+
+                    <h6 class="text-muted mt-4">Event Details</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div>
+                                <strong>Venue</strong>
+                                <p class="text-muted mb-0">@Model.PromoterRequestData.Venue</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <strong>City</strong>
+                                <p class="text-muted mb-0">@Model.PromoterRequestData.City</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <strong>Estimated Attendance</strong>
+                                <p class="text-muted mb-0">@Model.PromoterRequestData.EstimatedAttendance</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="text-muted">Description</h6>
+                    <p>@Model.PromoterRequestData.Description</p>
+
+                    <p class="text-muted small">
+                        <strong>Submitted:</strong> @Model.PromoterRequestData.SubmittedAt.ToString("MMMM dd, yyyy HH:mm")
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            @if (Model.PromoterRequestData.Status == "pending")
+            {
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="mb-3">Actions</h6>
+                        <form method="post" class="d-grid gap-2">
+                            <input type="hidden" name="requestId" value="@Model.PromoterRequestData.Id" />
+                            <button type="submit" name="handler" value="Approve" class="btn btn-success">
+                                ✓ Approve Request
+                            </button>
+                            <button type="submit" name="handler" value="Reject" class="btn btn-danger">
+                                ✕ Reject Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    This request is @Model.PromoterRequestData.Status.ToLower() and cannot be modified.
+                </div>
+            }
+        </div>
+    </div>
+}

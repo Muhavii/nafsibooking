@@ -77,3 +77,25 @@ PublishProfiles/
 
 # ASP.NET Core
 wwwroot/lib/
+# Secrets and sensitive config
+appsettings.Production.json
+*.key
+*.pfx
+*.pem
+
+# Database files
+nafsi.db
+nafsi.db-shm
+nafsi.db-wal
+*.mdf
+*.ldf
+
+# Temporary files
+*.tmp
+*.temp
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp

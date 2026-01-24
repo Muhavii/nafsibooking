@@ -4,6 +4,8 @@ namespace nafsibooking.Models;
 
 public class TicketTier
 {
+    public TicketTier() { }
+
     public TicketTier(string name, decimal price, string description, int available)
     {
         Name = name;
@@ -12,14 +14,16 @@ public class TicketTier
         Available = available;
     }
 
-    public string Name { get; }
-    public decimal Price { get; }
-    public string Description { get; }
-    public int Available { get; }
+    public string Name { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public int Available { get; set; }
 }
 
 public class Event
 {
+    public Event() { }
+
     public Event(
         string id,
         string title,
@@ -44,16 +48,16 @@ public class Event
         Tiers = tiers;
     }
 
-    public string Id { get; }
-    public string Title { get; }
-    public string Category { get; }
-    public string Venue { get; }
-    public string City { get; }
-    public DateTime Date { get; }
-    public decimal BasePrice { get; }
-    public string Description { get; }
-    public IReadOnlyList<string> Highlights { get; }
-    public IReadOnlyList<TicketTier> Tiers { get; }
+    public string Id { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public string Venue { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public DateTime Date { get; set; }
+    public decimal BasePrice { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public IReadOnlyList<string> Highlights { get; set; } = new List<string>();
+    public IReadOnlyList<TicketTier> Tiers { get; set; } = new List<TicketTier>();
 }
 
 public class BookingRequest
@@ -73,7 +77,7 @@ public class BookingRequest
     [Range(1, 10)]
     public int Tickets { get; set; } = 1;
 
-    [Range(typeof(bool), "true", "true", ErrorMessage = "Please accept the terms to continue.")]
+    [Required(ErrorMessage = "Please accept the terms to continue.")]
     public bool AcceptTerms { get; set; }
 }
 

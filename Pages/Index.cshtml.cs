@@ -8,13 +8,16 @@ namespace nafsibooking.Pages;
 public class IndexModel : PageModel
 {
     private readonly IEventService _eventService;
+    private readonly IAdminAuthService _authService;
 
-    public IndexModel(IEventService eventService)
+    public IndexModel(IEventService eventService, IAdminAuthService authService)
     {
         _eventService = eventService;
+        _authService = authService;
     }
 
     public IReadOnlyList<Event> Events { get; private set; } = Array.Empty<Event>();
+    public bool IsAdminAuthenticated { get; private set; }
 
     [BindProperty(SupportsGet = true)]
     public string? Query { get; set; }
@@ -24,6 +27,8 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
+        IsAdminAuthenticated = _authService.IsAdminAuthenticated(HttpContext);
+        
         DateTime? date = null;
         if (DateTime.TryParse(DateFilter, out var parsed))
         {
@@ -31,5 +36,11 @@ public class IndexModel : PageModel
         }
 
         Events = _eventService.GetEvents(Query, date);
+    }
+
+    public IActionResult OnPostLogout()
+    {
+        _authService.SignOut(HttpContext);
+        return RedirectToPage();
     }
 }
